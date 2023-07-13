@@ -1,0 +1,36 @@
+from pymongo import MongoClient
+
+# Conecta ao MongoDB Atlas
+client = MongoClient('<mongodb_uri>')
+
+# Cria um banco de dados
+db = client['banco']
+
+# Cria uma coleção
+collection = db['bank']
+
+# Insere documentos na coleção
+documento1 = {
+    'cliente_id': 1,
+    'nome': 'João',
+    'email': 'joao@example.com',
+    'saldo': 1000
+}
+
+documento2 = {
+    'cliente_id': 2,
+    'nome': 'Maria',
+    'email': 'maria@example.com',
+    'saldo': 2000
+}
+
+collection.insert_many([documento1, documento2])
+
+# Recupera informações com base nos pares de chave e valor
+resultado = collection.find({'nome': 'João'})
+for documento in resultado:
+    print(documento)
+
+resultado = collection.find({'saldo': {'$gt': 1500}})
+for documento in resultado:
+    print(documento)
