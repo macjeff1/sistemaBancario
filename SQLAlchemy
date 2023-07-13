@@ -1,0 +1,53 @@
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+# Cria o engine do SQLite
+engine = create_engine('sqlite:///database.db')
+
+# Cria uma classe base para as tabelas
+Base = declarative_base()
+
+
+# Define a classe Cliente
+class Cliente(Base):
+    __tablename__ = 'cliente'
+
+    id = Column(Integer, primary_key=True)
+    nome = Column(String(100), nullable=False)
+    email = Column(String(100), nullable=False)
+
+
+# Define a classe Conta
+class Conta(Base):
+    __tablename__ = 'conta'
+
+    id = Column(Integer, primary_key=True)
+    cliente_id = Column(Integer, nullable=False)
+    saldo = Column(Integer, nullable=False)
+
+
+# Cria as tabelas no banco de dados
+Base.metadata.create_all(engine)
+
+# Cria uma sessão para interagir com o banco de dados
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Exemplo de inserção de dados
+cliente1 = Cliente(nome='João', email='joao@example.com')
+session.add(cliente1)
+session.commit()
+
+conta1 = Conta(cliente_id=cliente1.id, saldo=1000)
+session.add(conta1)
+session.commit()
+
+# Exemplo de recuperação de dados
+clientes = session.query(Cliente).all()
+for cliente in clientes:
+    print(f'ID: {cliente.id}, Nome: {cliente.nome}, Email: {cliente.email}')
+
+contas = session.query(Conta).all()
+for conta in contas:
+    print(f'ID: {conta.id}, Cliente ID: {conta.cliente_id}, Saldo: {conta.saldo}')
