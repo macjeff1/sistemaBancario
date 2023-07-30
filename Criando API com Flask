@@ -1,0 +1,56 @@
+from ast import Return
+from fastapi import FastAPI
+import nest_asyncio
+from pyngrok import ngrok
+import uvicorn
+
+app = FastAPI()
+
+@app.get('/index')
+async def home():
+    return "a1,a2,a3,a4,a5"
+
+a1 = {
+    "numero": "1",
+    "nome": "Mahesh",
+    "cidade": "Bangalore",
+    "idade": "25",
+    "Pais": "India"
+}
+
+a2 = {
+    "numero": "1",
+    "nome": "Açex",
+    "cidade": "Londo",
+    "idade": "26",
+    "Pais": "UK"
+}
+
+a3 = {
+    "numero": "3",
+    "nome": "David",
+    "cidade": "San Francisco",
+    "idade": "27",
+    "Pais": "USA"
+}
+
+a4 = {
+    "numero": "4",
+    "nome": "jonh",
+    "cidade": "Toronto",
+    "idade": "28",
+    "Pais": "Canáda"
+}
+
+a5 = {
+    "numero": "5",
+    "nome": "Chris",
+    "cidade": "Paris",
+    "idade": "29",
+    "Pais": "France"
+}
+
+ngrok_tunnel = ngrok.connect(8000)
+print('Public URL:', ngrok_tunnel.public_url)
+nest_asyncio.apply()
+uvicorn.run(app, port=8000)
